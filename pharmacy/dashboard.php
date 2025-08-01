@@ -27,6 +27,11 @@
         style="background-color: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 8px 16px rgba(0,0,0,0.1); width: 100%; max-width: 900px;">
         <h2 style="text-align: center; color: #333; margin-bottom: 20px;">Available Prescriptions</h2>
 
+        <p style="text-align: center; margin-top: -10px; margin-bottom: 20px;">
+            <a href="profile.php" style="color: #0097a7; text-decoration: none; font-weight: 500;">Profile</a>
+        </p>
+
+
         <table style="width: 100%; border-collapse: collapse;">
             <thead>
                 <tr style="background-color: #f0f0f0;">
