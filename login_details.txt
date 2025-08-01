@@ -1,0 +1,8 @@
+User:
+
+01. User01 - user01@gmail.com - User@01
+02. User02 - user02@gmail.com - user02
+
+Pharmacy:
+
+pharma01 - pharma01@gmail.com - pharma@01
