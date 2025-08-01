@@ -68,6 +68,10 @@
                 <button type="submit" style="width: 100%; background-color: #0097a7; color: white; padding: 12px; border: none; border-radius: 8px; font-size: 16px; cursor: pointer;">
                     Login
                 </button>
+
+                <p style="text-align: center; margin-top: 15px;">
+                    Don't have an account? <a href="register.php" style="color: #0097a7; text-decoration: none;">Register here</a>.
+                </p>
             </form>
         </div>
     </body>
