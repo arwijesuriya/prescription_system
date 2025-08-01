@@ -1,43 +1,43 @@
 <?php
-session_start();
-include '../config/db.php';
+    session_start();
+    include '../config/db.php';
 
-if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'user') {
-    header("Location: login.php");
-    exit;
-}
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $note = filter_input(INPUT_POST, 'note', FILTER_SANITIZE_STRING);
-    $delivery_address = filter_input(INPUT_POST, 'delivery_address', FILTER_SANITIZE_STRING);
-    $delivery_time_slot = $_POST['delivery_time_slot'];
-    $user_id = $_SESSION['user_id'];
-
-    // Insert prescription
-    $stmt = $pdo->prepare("INSERT INTO prescriptions (user_id, note, delivery_address, delivery_time_slot) VALUES (?, ?, ?, ?)");
-    $stmt->execute([$user_id, $note, $delivery_address, $delivery_time_slot]);
-    $prescription_id = $pdo->lastInsertId();
-
-    if (isset($_FILES['images']) && count($_FILES['images']['name']) <= 5) {
-        foreach ($_FILES['images']['tmp_name'] as $key => $tmp_name) {
-            if ($_FILES['images']['error'][$key] === UPLOAD_ERR_OK) {
-                $ext = pathinfo($_FILES['images']['name'][$key], PATHINFO_EXTENSION);
-                $filename = uniqid() . '.' . $ext;
-                move_uploaded_file($tmp_name, '../uploads/' . $filename);
-
-                // Insert image record
-                $stmt = $pdo->prepare("INSERT INTO prescription_images (prescription_id, image_path) VALUES (?, ?)");
-                $stmt->execute([$prescription_id, $filename]);
-            }
-        }
-
-        // Redirect to dashboard after successful upload
-        header("Location: dashboard.php?success=1");
+    if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'user') {
+        header("Location: login.php");
         exit;
-    } else {
-        $error = "Maximum 5 images allowed.";
     }
-}
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $note = filter_input(INPUT_POST, 'note', FILTER_SANITIZE_STRING);
+        $delivery_address = filter_input(INPUT_POST, 'delivery_address', FILTER_SANITIZE_STRING);
+        $delivery_time_slot = $_POST['delivery_time_slot'];
+        $user_id = $_SESSION['user_id'];
+
+        // Insert prescription
+        $stmt = $pdo->prepare("INSERT INTO prescriptions (user_id, note, delivery_address, delivery_time_slot) VALUES (?, ?, ?, ?)");
+        $stmt->execute([$user_id, $note, $delivery_address, $delivery_time_slot]);
+        $prescription_id = $pdo->lastInsertId();
+
+        if (isset($_FILES['images']) && count($_FILES['images']['name']) <= 5) {
+            foreach ($_FILES['images']['tmp_name'] as $key => $tmp_name) {
+                if ($_FILES['images']['error'][$key] === UPLOAD_ERR_OK) {
+                    $ext = pathinfo($_FILES['images']['name'][$key], PATHINFO_EXTENSION);
+                    $filename = uniqid() . '.' . $ext;
+                    move_uploaded_file($tmp_name, '../uploads/' . $filename);
+
+                    // Insert image record
+                    $stmt = $pdo->prepare("INSERT INTO prescription_images (prescription_id, image_path) VALUES (?, ?)");
+                    $stmt->execute([$prescription_id, $filename]);
+                }
+            }
+
+            // Redirect to dashboard after successful upload
+            header("Location: dashboard.php?success=1");
+            exit;
+        } else {
+            $error = "Maximum 5 images allowed.";
+        }
+    }
 ?>
 
 <!DOCTYPE html>
