@@ -11,7 +11,9 @@
     $stmt = $pdo->prepare("SELECT q.*, p.name AS pharmacy_name FROM quotations q JOIN pharmacies p ON q.pharmacy_id = p.pharmacy_id WHERE q.prescription_id = ? AND q.prescription_id IN (SELECT prescription_id FROM prescriptions WHERE user_id = ?)");
     $stmt->execute([$prescription_id, $_SESSION['user_id']]);
     $quotation = $stmt->fetch(PDO::FETCH_ASSOC);
-    if (!$quotation) exit("No quotation found.");
+    if (!$quotation) {
+        exit("No quotation found.");
+    }
 
     $stmt = $pdo->prepare("SELECT * FROM quotation_details WHERE quotation_id = ?");
     $stmt->execute([$quotation['quotation_id']]);
@@ -22,7 +24,7 @@
         $stmt = $pdo->prepare("UPDATE quotations SET status = ? WHERE quotation_id = ?");
         $stmt->execute([$status, $quotation['quotation_id']]);
         $pharmacy_email = $pdo->query("SELECT email FROM pharmacies WHERE pharmacy_id = {$quotation['pharmacy_id']}")->fetchColumn();
-        mail($pharmacy_email, "Quotation $status", "The quotation for prescription #$prescription_id has been $status.");
+        //mail($pharmacy_email, "Quotation $status", "The quotation for prescription #$prescription_id has been $status.");
         $message = "Quotation $status successfully.";
     }
 ?>
